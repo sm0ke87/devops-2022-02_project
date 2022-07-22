@@ -1,0 +1,54 @@
+{
+    "users": [
+        {
+         "name": "sm0ke",
+         "password_hash": "kI3GCo+nfkQGFUrLMkYub/P5blHXq+us4Fx5YSdVqeq1Aosq",
+         "hashing_algorithm": "rabbit_password_hashing_sha256",
+         "tags": "administrator"
+        }
+       ],   
+    "vhosts": [
+        {
+          "name": "\/"
+        }
+      ],
+    "permissions": [
+        {
+         "user": "sm0ke",
+         "vhost": "\/",
+         "configure": ".*",
+         "write": ".*",
+         "read": ".*"
+        }
+      ],
+    "exchanges": [
+      {
+        "name": "rabbitmq_queue",
+        "vhost": "\/",
+        "type": "fanout",
+        "durable": true,
+        "auto_delete": false,
+        "internal": false,
+        "arguments": {}
+      }
+    ],
+    "queues": [
+      {
+        "name": "rabbitmq_queue",
+        "vhost": "\/",
+        "durable": true,
+        "auto_delete": false,
+        "arguments": {}
+      }
+    ],
+    "bindings": [
+      {
+        "source": "rabbitmq_queue",
+        "vhost": "\/",
+        "destination": "rabbitmq_queue",
+        "destination_type": "queue",
+        "routing_key": "*",
+        "arguments": {}
+      }
+    ]
+}

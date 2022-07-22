@@ -1,0 +1,70 @@
+version: '3.3'
+services:
+  mongo:
+    image: mongo:3.2
+    container_name: 'mongo'
+    volumes:
+      - post_db:/data/db
+    networks:
+      - back_net
+    env_file:
+      - .env
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq'
+    environment:
+        - RABBITMQ_USER=sm0ke
+        - RABBITMQ_PASS=default_password
+        - RABBITMQ_NODENAME=rabbit@staticrabbit
+    extra_hosts:
+      - "staticrabbit:127.0.0.1"
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ./rabbitmq-enabled-plugins:/etc/rabbitmq/enabled_plugins
+        - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+        - ./rabbitmq-defs.json:/etc/rabbitmq/rabbitmq-defs.json
+    networks:
+        - back_net
+
+  ui:
+    depends_on:
+      - "mongo"
+    build: ./search_engine_ui
+    image: ${USERNAME}/search_engine_ui:${VERSION}
+    container_name: 'ui'
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:8000/tcp
+    networks:
+      - back_net
+      - front_net
+  
+  crawler:
+    depends_on:
+      - "mongo"
+      - "rabbitmq"
+    build: ./search_engine_crawler
+    image: ${USERNAME}/search_engine_crawler:${VERSION}
+    container_name: 'crawler'
+    env_file:
+      - .env
+    networks:
+      - back_net
+      - front_net
+
+volumes:
+  post_db:
+
+networks:
+  back_net:
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24
+  front_net:
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
