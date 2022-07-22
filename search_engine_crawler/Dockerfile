@@ -3,8 +3,8 @@ FROM python:3.6.0-alpine
 WORKDIR /search_engine_crawler
 
 COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
+COPY requirements-test.txt requirements-test.txt
+RUN pip install -r requirements.txt && pip install -r requirements-test.txt
 COPY . .
 
 ENV MONGO mongo
