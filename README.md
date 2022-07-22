@@ -1,6 +1,22 @@
 # devops-2022-02_project
 
+<div id="header" align="center">
+  <img src="https://media.giphy.com/media/5eLDrEaRGHegx2FeF2/giphy.gif" width="180"/>
+</div>
+<div id="badge" align="center">
+  <a href="https://www.linkedin.com/in/%D1%81%D0%B5%D1%80%D0%B3%D0%B5%D0%B9-%D0%B0%D0%BB%D0%B8%D0%BC%D0%BE%D0%B2-a4522568/">
+  <img src="https://img.shields.io/badge/LinkedIn-blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
+  </a>
+  <a href="https://spb.hh.ru/resume/b509aa89ff01dcae2a0039ed1f55716850524a">
+  <img src="https://img.shields.io/badge/HH.RU-red?style=for-the-badge" alt="Youtube Badge"/>
+  <a>
+</div>
+
 ## Проект от курса OTUS devops-2022-02
+Основа проекта:
+* [Crawler] (https://github.com/express42/search_engine_crawler "Crawler")
+* [UI] (https://github.com/express42/search_engine_ui "UI)
+
 
 ## Внесеные изменения по проекту:
 1. **crawler.py** 

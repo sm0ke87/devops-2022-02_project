@@ -33,7 +33,7 @@ services:
     depends_on:
       - "mongo"
     build: ./search_engine_ui
-    image: ${USERNAME}/search_engine_ui:${VERSION}
+    image: ${USER_NAME}/search_engine_ui:${VERSION}
     container_name: 'ui'
     env_file:
       - .env
@@ -48,7 +48,7 @@ services:
       - "mongo"
       - "rabbitmq"
     build: ./search_engine_crawler
-    image: ${USERNAME}/search_engine_crawler:${VERSION}
+    image: ${USER_NAME}/search_engine_crawler:${VERSION}
     container_name: 'crawler'
     env_file:
       - .env
