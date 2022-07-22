@@ -1,10 +1,9 @@
-# Проект от курса OTUS devops-2022-02
+# devops-2022-02_project
 
-
+## Проект от курса OTUS devops-2022-02
 
 ## Внесеные изменения по проекту:
-1. 
-**crawler.py** 
+1. **crawler.py** 
 > channel.queue_declare(queue=mqqueue, **durable=True**) \
 Для того, что бы очередь была согласована со стороны Crawler
 
@@ -22,3 +21,7 @@ rabbitmq    | 2022-07-22 09:42:14.404201+00:00 [warning] <0.589.0> client unexpe
 ```
 Login failed
 ```
+3. **search_engine_ui/requirements.txt**
+> Добавлен MarkupSafe==0.23
+
+Иначе приложение не собирается
