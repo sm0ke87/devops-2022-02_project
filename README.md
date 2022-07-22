@@ -22,6 +22,6 @@ rabbitmq    | 2022-07-22 09:42:14.404201+00:00 [warning] <0.589.0> client unexpe
 Login failed
 ```
 3. **search_engine_ui/requirements.txt**
-> Добавлен MarkupSafe==0.23
+> Добавлен MarkupSafe>=2.0
 
-Иначе приложение не собирается
+Иначе приложение либо не запускается с 0.23 версией, или Jinja2 не может вернуть index.html
