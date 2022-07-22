@@ -14,9 +14,21 @@
 
 ## Проект от курса OTUS devops-2022-02
 Основа проекта:
-* [Crawler] (https://github.com/express42/search_engine_crawler "Crawler")
-* [UI] (https://github.com/express42/search_engine_ui "UI)
+* [Crawler](https://github.com/express42/search_engine_crawler "Crawler")
+* [UI](https://github.com/express42/search_engine_ui "UI")
 
+## Техническое задание
+
+    - [ ] Создание и управление инфраструктурой
+
+        - [ ] Ресурсы и возможности YC
+        - [ ] Инфраструктура CI/CD на основе Gitlab
+        - [ ] Сбор полезных метрик для постоянного мониторинга
+    
+    - [ ] Infrastructure as Code - Terraform
+    - [ ] Управление конфигурациями - Ansible
+
+## Дополняется
 
 ## Внесеные изменения по проекту:
 1. **crawler.py** 
