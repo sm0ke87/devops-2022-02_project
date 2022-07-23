@@ -22,7 +22,7 @@ variable "service_account_key_file" {
 
 variable "private_key_path" {
   description = "private key path"
-  default     = "~/.ssh/sm0ke"
+  default     = "~/.ssh/id_rsa"
 }
 
 variable "access_key" {

@@ -18,7 +18,8 @@ resource "yandex_compute_instance" "runner" {
   name        = "runner"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
- 
+  hostname    = "runner"
+
 
   resources {
     cores  = 2
@@ -30,6 +31,7 @@ resource "yandex_compute_instance" "runner" {
     initialize_params {
       image_id = var.image_id
       size     = 20
+      type     = "network-ssd"
 
     }
   }
@@ -37,7 +39,7 @@ resource "yandex_compute_instance" "runner" {
     # Указан id подсети default-ru-central1-a
     subnet_id = var.subnet_id
     nat       = true
-    
+
   }
 
   metadata = {
@@ -49,6 +51,7 @@ resource "yandex_compute_instance" "gitlab" {
   name        = "gitlab"
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
+  hostname    = "gitlab"
 
   resources {
     cores  = 2
@@ -60,6 +63,7 @@ resource "yandex_compute_instance" "gitlab" {
     initialize_params {
       image_id = var.image_id
       size     = 50
+      type     = "network-ssd"
 
     }
   }
@@ -68,7 +72,7 @@ resource "yandex_compute_instance" "gitlab" {
     # Указан id подсети default-ru-central1-a
     subnet_id = var.subnet_id
     nat       = true
-    
+
   }
 
   metadata = {
