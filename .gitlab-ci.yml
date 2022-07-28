@@ -1,21 +1,34 @@
+image: docker
+
 stages:
-  - build
   - test
-  - deploy
-build_job:
 
-stage: build
-script:
-  - echo 'Building'
+test_job_crawler:
+  stage: test
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - apk update && apk upgrade
+    - apk add python3-dev libffi-dev openssl-dev gcc libc-dev make
+    - apk add --no-cache py-pip python3 
+    - pip install --no-cache-dir docker-compose
+  script:
+    - docker-compose up -d
+    - docker-compose ps
+    - docker exec crawler /bin/sh -c "python3 -m unittest discover -s tests/ && coverage run -m unittest discover -s tests/ && coverage report --include crawler/crawler.py"
 
-test_unit_job:
-stage: test
-script:
-  - echo 'Testing 1'
-
-test_integration_job:
-stage: test
-script:
-  - echo 'Testing 2'
-
-deploy_job:
+test_job_ui:
+  stage: test
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - apk update && apk upgrade
+    - apk add python3-dev libffi-dev openssl-dev gcc libc-dev make
+    - apk add --no-cache py-pip python3
+    - pip install --no-cache-dir docker-compose
+  script:
+    - docker-compose up -d
+    - docker-compose ps
+    - docker exec ui /bin/sh -c "cd .. && python -m unittest discover -s tests/ && coverage run -m unittest discover -s tests/ && coverage report --include ui/ui.py"

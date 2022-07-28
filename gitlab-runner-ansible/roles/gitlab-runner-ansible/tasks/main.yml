@@ -1,0 +1,78 @@
+---
+- name: Update system
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install required packages
+  apt: name={{ docker_required_packages }} state=latest update_cache=yes
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+
+- name: Install packages for docker
+  apt: name={{ docker_packges }} state=latest update_cache=yes
+
+- name: Immediately update pip
+  pip:
+    name:
+      - pip
+    state: latest
+
+- name: Install docker-compose from pip
+  pip:
+    name:
+      - docker
+      - docker-compose
+
+- name: Add adminstrator to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+- name: Add gitlab-runner user to docker group
+  user:
+    name: gitlab-runner
+    groups: docker
+    append: yes
+
+- name: chown sock for username
+  file:
+    path: /var/run/docker.sock
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: sm0ke
+    group: sm0ke
+    mode:  '0775'
+  loop:
+    - /srv/runner
+
+- name: Template a file to srv/gitlab/
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/runner/docker-compose.yml
+    owner: sm0ke
+    group: sm0ke
+    mode: '0644'
+
+- name: Template a file to srv/gitlab/
+  template:
+    src: .env.j2
+    dest: /srv/runner/.env
+    owner: sm0ke
+    group: sm0ke
+    mode: '0644'

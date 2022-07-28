@@ -23,7 +23,7 @@ services:
         - 5672:5672
         - 15672:15672
     volumes:
-        - ./rabbitmq-enabled-plugins:/etc/rabbitmq/
+        - ./rabbitmq-enabled-plugins:/etc/rabbitmq/enabled_plugins
         - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
         - ./rabbitmq-defs.json:/etc/rabbitmq/rabbitmq-defs.json
     networks:

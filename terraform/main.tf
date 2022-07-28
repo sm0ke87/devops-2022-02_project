@@ -7,6 +7,7 @@ terraform {
   required_version = ">= 0.13"
 }
 
+
 provider "yandex" {
   service_account_key_file = var.service_account_key_file
   cloud_id                 = var.cloud_id
@@ -19,6 +20,7 @@ resource "yandex_compute_instance" "runner" {
   platform_id = "standard-v1"
   zone        = "ru-central1-a"
   hostname    = "runner"
+  
 
 
   resources {
@@ -45,6 +47,12 @@ resource "yandex_compute_instance" "runner" {
   metadata = {
     user-data = "${file("./metadata")}"
   }
+
+  provisioner "local-exec" {
+    command = "sleep 30;ANSIBLE_CONFIG=../gitlab-runner-ansible/ansible.cfg ansible-playbook -u ${var.username} -e address='${self.network_interface.0.nat_ip_address}' -i '${yandex_compute_instance.runner.network_interface.0.nat_ip_address},' ../gitlab-runner-ansible/playbook.yml"
+  }
+
+  depends_on = [yandex_compute_instance.gitlab]
 }
 
 resource "yandex_compute_instance" "gitlab" {
