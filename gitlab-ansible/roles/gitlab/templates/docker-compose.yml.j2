@@ -7,6 +7,7 @@ web:
     GITLAB_OMNIBUS_CONFIG: |
       external_url 'http://{{ address }}'
       gitlab_rails['initial_root_password'] = 'roottoor123'
+      GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN = 'GR1348941sFL_v2GU7pKboQ-t4RWV'
   ports:
     - '80:80'
     - '443:443'

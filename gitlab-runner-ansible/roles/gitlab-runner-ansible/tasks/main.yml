@@ -61,18 +61,19 @@
   loop:
     - /srv/runner
 
-- name: Template a file to srv/gitlab/
-  template:
-    src: docker-compose.yml.j2
-    dest: /srv/runner/docker-compose.yml
-    owner: sm0ke
-    group: sm0ke
-    mode: '0644'
-
-- name: Template a file to srv/gitlab/
+- name: Template a file to srv/runner/
   template:
     src: .env.j2
     dest: /srv/runner/.env
     owner: sm0ke
     group: sm0ke
     mode: '0644'
+
+- name: Template a file to srv/runner/
+  template:
+    src: docker-compose.yml.j2
+    dest: /srv/runner/docker-compose.yml
+    owner: sm0ke
+    group: sm0ke
+    mode: '0644'
+    

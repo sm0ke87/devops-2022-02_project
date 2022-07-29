@@ -1,1 +1,7 @@
 ---
+# docker-compose up
+- name: deploy Docker Compose stack
+  docker_compose:
+    project_src: /srv/runner
+    files:
+    - docker-compose.yml
