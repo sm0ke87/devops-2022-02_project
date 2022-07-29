@@ -11,13 +11,21 @@ services:
       - .env
 
   rabbitmq:
-    build: ./rabbitMQ
+    image: rabbitmq:3-management
     container_name: 'rabbitmq'
+    environment:
+        - RABBITMQ_USER=sm0ke
+        - RABBITMQ_PASS=default_password
+        - RABBITMQ_NODENAME=rabbit@staticrabbit
     extra_hosts:
       - "staticrabbit:127.0.0.1"
     ports:
         - 5672:5672
         - 15672:15672
+    volumes:
+        - ./rabbitmq-enabled-plugins:/etc/rabbitmq/
+        - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config
+        - ./rabbitmq-defs.json:/etc/rabbitmq/rabbitmq-defs.json
     networks:
         - back_net
 
