@@ -19,14 +19,16 @@
 
 ## Техническое задание
 
-    - [ ] Создание и управление инфраструктурой
-
-        - [ ] Ресурсы и возможности YC
-        - [ ] Инфраструктура CI/CD на основе Gitlab
+    - [ ] Создание и управление инфраструктурой:
+        - [x] Ресурсы и возможности YC
+        - [ ] Инфраструктура CI/CD на основе Gitlab:
+            - [x] Gitlab
+            - [x] Gtilab-runner
+            - [ ] Kubernetes сluster 
         - [ ] Сбор полезных метрик для постоянного мониторинга
     
-    - [ ] Infrastructure as Code - Terraform
-    - [ ] Управление конфигурациями - Ansible
+    - [x] Infrastructure as Code - Terraform
+    - [x] Управление конфигурациями - Ansible
 
 ### Terrafrom + Ansible
 Terrafrom разворачивает 2 инстанса: \
@@ -36,6 +38,15 @@ Terrafrom разворачивает 2 инстанса: \
     3.Развернуть кластер кубера или docker-swarm
 
 ### Pipline's
+Giltab-ci состоит из трех этапов:
+* Тестирование приложения crawler в среде созданной docker-compose
+* Тестирование приложения ui в среде созданной docker-compose
+* Сборка образов crawler, ui, rabbitMQ их тегирования и отправка на хранение в регистри [DockerHub](https://hub.docker.com/u/sm0ke87 "DockerHub by sm0ke87")
+
+### Kubernetes cluster
+Пока не реализовано
+
+### Сбор метрик
 
 
 ## Внесеные изменения по проекту:
@@ -44,7 +55,7 @@ Terrafrom разворачивает 2 инстанса: \
 Для того, что бы очередь была согласована со стороны Crawler
 
 Иначе контейнер не запускался:
-```
+```service-acc
 rabbitmq    | 2022-07-22 09:42:14.389534+00:00 [error] <0.598.0> Channel error on connection <0.589.0> (10.0.2.5:41960 -> 10.0.2.2:5672, vhost: '/', user: 'sm0ke'), channel 1:
 rabbitmq    | 2022-07-22 09:42:14.389534+00:00 [error] <0.598.0> operation queue.declare caused a channel exception precondition_failed: inequivalent arg 'durable' for queue 'rabbitmq_queue' in vhost '/': received 'false' but current is 'true'
 rabbitmq    | 2022-07-22 09:42:14.404201+00:00 [warning] <0.589.0> closing AMQP connection <0.589.0> (10.0.2.5:41960 -> 10.0.2.2:5672, vhost: '/', user: 'sm0ke'):
