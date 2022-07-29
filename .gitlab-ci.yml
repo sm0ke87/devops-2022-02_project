@@ -2,6 +2,7 @@ image: docker
 
 stages:
   - test
+  - build
 
 test_job_crawler:
   stage: test
@@ -44,6 +45,8 @@ docker-build:
     - docker build --pull -t sm0ke87/search_engine_crawler:$CI_COMMIT_REF_SLUG ./search_engine_crawler
     - docker push sm0ke87/search_engine_crawler:$CI_COMMIT_REF_SLUG
     - docker build --pull -t sm0ke87/search_engine_ui:$CI_COMMIT_REF_SLUG ./search_engine_ui
-    - docker push sm0ke87/ui:$CI_COMMIT_REF_SLUG
-    - docker build --pull -t sm0ke87/rabbitMQ:$CI_COMMIT_REF_SLUG ./rabbitMQ
-    - docker push sm0ke87/rabbitMQ:$CI_COMMIT_REF_SLUG
+    - docker push sm0ke87/search_engine_ui:$CI_COMMIT_REF_SLUG
+    - docker build --pull -t sm0ke87/rabbitmq:$CI_COMMIT_REF_SLUG ./rabbitMQ
+    - docker push sm0ke87/rabbitmq:$CI_COMMIT_REF_SLUG
+
+
