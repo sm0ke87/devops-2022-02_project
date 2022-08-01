@@ -1,5 +1,6 @@
 *.tfstate
 *.tfstate.backup
+*.tfstate.*.backup
 terraform/metadata
 *terraform.lock.hcl
 terraform/.terraform
