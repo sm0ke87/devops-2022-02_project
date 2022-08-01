@@ -10,18 +10,20 @@ metadata:
   name: rabbitmq
   namespace: app
   labels:
-    k8s-app: rabbitmq
+    app: rabbitmq
     project: gitlab-project
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: rabbitmq
+      app: rabbitmq
+      project: gitlab-project
   template:
     metadata:
       name: rabbitmq
       labels:
-        k8s-app: rabbitmq
+        app: rabbitmq
+        project: gitlab-project
     spec:
       hostname: rabbitmq
       hostAliases:
@@ -39,9 +41,10 @@ metadata:
   name: rabbitmq
   namespace: app
   labels:
-    k8s-app: rabbitmq
+    app: rabbitmq
     project: gitlab-project
 spec:
+  type: ClusterIP
   ports:
   - name: first
     protocol: TCP
@@ -52,7 +55,7 @@ spec:
     port: 15672
     targetPort: 5672
   selector:
-    k8s-app: rabbitmq
+    app: rabbitmq
 ---
 #Crawler
 kind: Deployment
@@ -61,24 +64,31 @@ metadata:
   name: crawler
   namespace: app
   labels:
-    k8s-app: crawler
+    app: crawler
     project: gitlab-project
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: crawler
+      app: crawler
+      project: gitlab-project
   template:
     metadata:
       name: crawler
       labels:
-        k8s-app: crawler
+        app: crawler
+        project: gitlab-project
     spec:
       hostname: crawler
       containers:
       - name: crawler
         # так мы назвали наш docker image
         image: sm0ke87/search_engine_crawler:main
+        env:
+        - name: MONGO
+          value: mongo
+        - name: MONGO_PORT
+          value: "27017"
 ---
 kind: Service
 apiVersion: v1
@@ -86,11 +96,15 @@ metadata:
   name: crawler
   namespace: app
   labels:
-    k8s-app: crawler
+    app: crawler
     project: gitlab-project
 spec:
   selector:
-    k8s-app: crawler
+    app: crawler
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
 ---
 #ui
 kind: Deployment
@@ -99,24 +113,31 @@ metadata:
   name: ui
   namespace: app
   labels:
-    k8s-app: ui
+    app: ui
     project: gitlab-project
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: ui
+      app: ui
+      project: gitlab-project
   template:
     metadata:
       name: ui
       labels:
-        k8s-app: ui
+        app: ui
+        project: gitlab-project
     spec:
       hostname: ui
       containers:
       - name: ui
         # так мы назвали наш docker image
         image: sm0ke87/search_engine_ui:main
+        env:
+        - name: MONGO
+          value: mongo
+        - name: MONGO_PORT
+          value: "27017"
 ---
 kind: Service
 apiVersion: v1
@@ -124,11 +145,13 @@ metadata:
   name: ui
   namespace: app
   labels:
-    k8s-app: ui
+    app: ui
     project: gitlab-project
 spec:
+  type: NodePort
   selector:
-    k8s-app: ui
+    app: ui
+    project: gitlab-project
   ports:
   - port: 8000
     protocol: TCP
@@ -142,18 +165,20 @@ metadata:
   name: mongo
   namespace: app
   labels:
-    k8s-app: mongo
+    app: mongo
     project: gitlab-project
 spec:
   replicas: 1
   selector:
     matchLabels:
-      k8s-app: mongo
+      app: mongo
+      project: gitlab-project
   template:
     metadata:
       name: mongo
       labels:
-        k8s-app: mongo
+        app: mongo
+        project: gitlab-project
     spec:
       hostname: mongo
       containers:
@@ -167,7 +192,7 @@ metadata:
   name: mongo
   namespace: app
   labels:
-    k8s-app: mongo
+    app: mongo
     project: gitlab-project
 spec:
   ports:
@@ -175,4 +200,4 @@ spec:
     protocol: TCP
     targetPort: 27017
   selector:
-    k8s-app: mongo
+    app: mongo
