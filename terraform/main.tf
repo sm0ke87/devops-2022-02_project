@@ -48,9 +48,9 @@ resource "yandex_compute_instance" "runner" {
     user-data = "${file("./metadata")}"
   }
 
-  #provisioner "local-exec" {
-  #  command = "sleep 30;ANSIBLE_CONFIG=../gitlab-runner-ansible/ansible.cfg ansible-playbook -u ${var.username} -e address='${self.network_interface.0.nat_ip_address} GTILAB_URL=${yandex_compute_instance.gitlab.network_interface.0.nat_ip_address}' -i '${yandex_compute_instance.runner.network_interface.0.nat_ip_address},' ../gitlab-runner-ansible/playbook.yml"
-  #}
+  provisioner "local-exec" {
+    command = "sleep 30;ANSIBLE_CONFIG=../gitlab-runner-ansible/ansible.cfg ansible-playbook -u ${var.username} -e address='${self.network_interface.0.nat_ip_address} GTILAB_URL=${yandex_compute_instance.gitlab.network_interface.0.nat_ip_address}' -i '${yandex_compute_instance.runner.network_interface.0.nat_ip_address},' ../gitlab-runner-ansible/playbook.yml"
+  }
 
   depends_on = [yandex_compute_instance.gitlab]
 }
@@ -87,9 +87,9 @@ resource "yandex_compute_instance" "gitlab" {
     user-data = "${file("./metadata")}"
   }
 
-  #provisioner "local-exec" {
-  #  command = "sleep 30;ANSIBLE_CONFIG=../gitlab-ansible/ansible.cfg ansible-playbook -u ${var.username} -e 'address=${self.network_interface.0.nat_ip_address}'  -i '${yandex_compute_instance.gitlab.network_interface.0.nat_ip_address},' ../gitlab-ansible/playbook.yml"
-  #}
+  provisioner "local-exec" {
+    command = "sleep 30;ANSIBLE_CONFIG=../gitlab-ansible/ansible.cfg ansible-playbook -u ${var.username} -e 'address=${self.network_interface.0.nat_ip_address}'  -i '${yandex_compute_instance.gitlab.network_interface.0.nat_ip_address},' ../gitlab-ansible/playbook.yml"
+  }
 }
 
 resource "yandex_kubernetes_cluster" "k8s" {
