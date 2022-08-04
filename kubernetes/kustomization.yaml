@@ -1,6 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 resources:
-  - deployment.yaml
-namePrefix: dev-
-namespace: app
-commonLabels:
-  environment: app
+- ./deployment.yml
+images:
+- name: sm0ke87/rabbitmq:main
+  newName: sm0ke87/rabbitmq
+  newTag: 992a7ebf
+- name: sm0ke87/search_engine_crawler:main
+  newName: sm0ke87/search_engine_crawler
+  newTag: 992a7ebf
+- name: sm0ke87/search_engine_ui:main
+  newName: sm0ke87/search_engine_ui
+  newTag: 992a7ebf

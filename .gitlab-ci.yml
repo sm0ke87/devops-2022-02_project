@@ -38,23 +38,24 @@ docker-build:
 
 deploy-prod:
   stage: deploy
-  image: alpine:3.8
+  image: nekottyo/kustomize-kubeval:latest
   before_script:
     - apk add --no-cache git curl bash
-    - curl --silent --location --remote-name \
-      "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.2.3/kustomize_kustomize.v3.2.3_linux_amd64" && \
-      chmod a+x kustomize_kustomize.v3.2.3_linux_amd64 && \
-      sudo mv kustomize_kustomize.v3.2.3_linux_amd64 /usr/local/bin/kustomize
-    - git clone http://${CI_USERNAME}:${CI_TOKEN}@84.201.133.122/root/devops-2022-02_project.git
+    - git clone http://${CI_USERNAME}:${CI_TOKEN}@62.84.119.217//root/devops-2022-02_project.git
     - cd devops-2022-02_project
     - git init
-    - git remote set-url origin http://${CI_USERNAME}:${CI_TOKEN}@84.201.133.122/root/devops-2022-02_project.git
+    - git remote set-url origin http://${CI_USERNAME}:${CI_TOKEN}@62.84.119.217/root/devops-2022-02_project.git
     - git config --global user.email "gitlab@gitlab.com"
     - git config --global user.name "${CI_USERNAME}"
+    - git config --get user.email
+    - git config --get user.name
   script:
-    - git checkout -B master
+    - git checkout -B master1
     - cd kubernetes
-    - kustomize edit set environment app-dev-${CI_COMMIT_REF_SLUG}
+    - kustomize edit set image sm0ke87/rabbitmq:main=sm0ke87/rabbitmq:${CI_COMMIT_SHORT_SHA}
+    - kustomize edit set image sm0ke87/search_engine_crawler:main=sm0ke87/search_engine_crawler:${CI_COMMIT_SHORT_SHA}
+    - kustomize edit set image sm0ke87/search_engine_ui:main=sm0ke87/search_engine_ui:${CI_COMMIT_SHORT_SHA}
+    - cat kustomization.yaml
     - git commit -am '[skip ci] PROD image update'
-    - git push origin master
+    - git push origin master1
 
