@@ -185,13 +185,6 @@ spec:
       - name: mongo
         # так мы назвали наш docker image
         image: mongo:3.2
-        volumeMounts:
-        - name: mongo-storage
-          mountPath: /data/db
-      volumes:
-      - name: mongo-storage
-        persistentVolumeClaim:
-          claimName: mongo-pvc-dynamic
 ---
 kind: Service
 apiVersion: v1
@@ -209,18 +202,6 @@ spec:
   selector:
     app: mongo
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: mongo-pvc-dynamic
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: fast
-  resources:
-    requests:
-      storage: 2Gi
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -231,72 +212,78 @@ spec:
   rules:
     - http:
         paths:
-          - pathType: Prefix
-            backend:
-              service:
-                name: ui
-                port:
-                  number: 8000
-            path: /
-          - pathType: Prefix
-            backend:
-              service:
-                name: grafana
-                port:
-                  number: 3000
-            path: /grafana
-          - pathType: Prefix
-            backend:
-              service:
-                name: prometheus
-                port:
-                  number: 9090
-            path: /prometheus
+        - path: /ui
+          pathType: Prefix
+          backend:
+            service:
+              name: ui
+              port:
+                number: 8000
+        - path: /grafana
+          pathType: Prefix
+          backend:
+            service:
+              name: grafana
+              port:
+                number: 3000
+        - path: /prom
+          pathType: Prefix
+          backend:
+          service:
+            name: prometheus
+            port:
+              number: 3000
 ---
 #Prometeus
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: promtheus
+  name: prometheus
   namespace: app
   labels:
-    app: promtheus
+    app: prometheus
     project: gitlab-project
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: promtheus
+      app: prometheus
       project: gitlab-project
   template:
     metadata:
-      name: promtheus
+      name: prometheus
       labels:
-        app: promtheus
+        app: prometheus
         project: gitlab-project
     spec:
-      hostname: promtheus
+      hostname: prometheus
       containers:
-      - name: promtheus
+      - name: prometheus
         # так мы назвали наш docker image
-        image: sm0ke87/promtheus:main
+        image: sm0ke87/prometheus:main
+        env:
+        - name: ui
+          value: ui
+        - name: crwaler
+          value: crawler
+
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: promtheus
+  name: prometheus
   namespace: app
   labels:
-    app: promtheus
+    app: prometheus
     project: gitlab-project
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - protocol: TCP
     port: 9090
     targetPort: 9090
   selector:
-    app: promtheus
+    app: prometheus
 ---
 #grafana
 #Prometeus
@@ -336,7 +323,7 @@ metadata:
     app: grafana
     project: gitlab-project
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - protocol: TCP
     port: 3000
