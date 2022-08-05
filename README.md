@@ -19,16 +19,16 @@
 
 ## Техническое задание
 
-    - [ ] Создание и управление инфраструктурой:
-        - [x] Ресурсы и возможности YC
-        - [x] Инфраструктура CI/CD на основе Gitlab:
-            - [x] Gitlab
-            - [x] Gtilab-runner
-            - [x] Kubernetes сluster 
-        - [ ] Сбор полезных метрик для постоянного мониторинга
-    
-    - [x] Infrastructure as Code - Terraform
-    - [x] Управление конфигурациями - Ansible
+- [x] Создание и управление инфраструктурой:
+    - [x] Ресурсы и возможности YC
+    - [x] Инфраструктура CI/CD на основе Gitlab:
+        - [x] Gitlab
+        - [x] Gtilab-runner
+        - [x] Kubernetes сluster 
+    - [ ] Сбор полезных метрик для постоянного мониторинга
+
+- [x] Infrastructure as Code - Terraform
+- [x] Управление конфигурациями - Ansible
 
 ### Terrafrom + Ansible
 Terrafrom разворачивает 2 инстанса: \
