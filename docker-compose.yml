@@ -47,6 +47,23 @@ services:
     networks:
       - back_net
       - front_net
+  
+  prometheus:
+    build: ./monitoring/prometheus
+    image: ${USER_NAME}/prometheus:${VERSION}
+    container_name: 'prometheus'
+    networks:
+      - back_net
+      - front_net
+  
+  grafana:
+    build: ./monitoring/grafana
+    image: ${USER_NAME}/grafana:${VERSION}
+    container_name: 'grafana'
+    networks:
+      - back_net
+      - front_net
+
 
 volumes:
   post_db:

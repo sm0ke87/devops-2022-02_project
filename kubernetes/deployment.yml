@@ -185,6 +185,13 @@ spec:
       - name: mongo
         # так мы назвали наш docker image
         image: mongo:3.2
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: mongo-pvc-dynamic
 ---
 kind: Service
 apiVersion: v1
@@ -201,6 +208,18 @@ spec:
     targetPort: 27017
   selector:
     app: mongo
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mongo-pvc-dynamic
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast
+  resources:
+    requests:
+      storage: 2Gi
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -219,3 +238,108 @@ spec:
                 port:
                   number: 8000
             path: /
+          - pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000
+            path: /grafana
+          - pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  number: 9090
+            path: /prometheus
+---
+#Prometeus
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: promtheus
+  namespace: app
+  labels:
+    app: promtheus
+    project: gitlab-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promtheus
+      project: gitlab-project
+  template:
+    metadata:
+      name: promtheus
+      labels:
+        app: promtheus
+        project: gitlab-project
+    spec:
+      hostname: promtheus
+      containers:
+      - name: promtheus
+        # так мы назвали наш docker image
+        image: sm0ke87/promtheus:main
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: promtheus
+  namespace: app
+  labels:
+    app: promtheus
+    project: gitlab-project
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 9090
+    targetPort: 9090
+  selector:
+    app: promtheus
+---
+#grafana
+#Prometeus
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: grafana
+  namespace: app
+  labels:
+    app: grafana
+    project: gitlab-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+      project: gitlab-project
+  template:
+    metadata:
+      name: grafana
+      labels:
+        app: grafana
+        project: gitlab-project
+    spec:
+      hostname: grafana
+      containers:
+      - name: grafana
+        # так мы назвали наш docker image
+        image: sm0ke87/grafana:main
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: grafana
+  namespace: app
+  labels:
+    app: grafana
+    project: gitlab-project
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+  selector:
+    app: grafana
