@@ -12,6 +12,13 @@
   <a>
 </div>
 
+<div id="Tech_bages" align="center">
+
+![GitLab CI](https://img.shields.io/badge/gitlab%20ci-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white) ![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white) ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white) ![RabbitMQ](https://img.shields.io/badge/Rabbitmq-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
+<br>
+![YandexCloud](./icon_white_circ.svg)
+
+</div>
 ## Проект от курса OTUS devops-2022-02
 Основа проекта:
 * [Crawler](https://github.com/express42/search_engine_crawler "Crawler")
@@ -84,14 +91,14 @@ terrafrom apply
 
 3) Переходим по адресу gitlab (login/pass:root/roottoor123), отключаем регистрацию, меняем пароль на какой захотим и импортируем проект с гитхаба:
 
-4) Берм ключ из проекта и регистрируем раннер:
+4) Берем ключ из проекта и регистрируем раннер. В папке раннеа /srv/runner прописываем в env данные поднятого gitlab и поднимаем раннер через docker-compose:
 ```
 ssh login@external_ip_address_runner
 cd /srv/runner/
 vi .env
 docker-compose up -d
 ```
-В папке раннеа /srv/runner прописываем в env данные поднятого gitlab и поднимаем раннер через docker-compose
+
 
 5) Добавляем вариейбелсы в проект:
 ```
