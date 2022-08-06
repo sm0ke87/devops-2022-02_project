@@ -53,12 +53,106 @@ ArgoCD остлеживает основную ветку main, последни
 С подходом GitOps сокращается колчество хранения секретов для проекта. Так как автоматизация достигается не взаимодействием через kubectl, а через main ветку.
 
 ### Сбор метрик
-Для сбора метрик, которые отдает приложение в Kubernetes разворачивается два сервиса:
+Для сбора метрик, которые отдает приложение и crawler, в Kubernetes разворачивается два сервиса:
 
 * Prometheus c адресом http://ingress-ip/prometheus/graph
 * Grafana с адресом http://ingress-ip/grafana
+* Ноды контролируются ArgoCD
 
-| WARNING: Политики безопасности для YC кластера я не победил, хотя в terraform они прописаны, в части подключение по SSH, поэтому автоматизацию через Ansible не смог произвести, следовательно решение следующее: prometheus и grafana собираются из docker образов и деплоятся в проект, считаю меру более чем применимой|
+|:warning: Политики безопасности для YC кластера я не победил, хотя в terraform они прописаны, в части подключение по SSH, поэтому автоматизацию через Ansible не смог произвести, следовательно решение следующее: prometheus и grafana собираются из docker образов и деплоятся в проект, считаю меру более чем применимой|
+| --- |
+
+## Как запустить проект
+1) Клонируем проект:
+```
+git clone https://github.com/sm0ke87/devops-2022-02_project.git
+``` 
+2) Создаем сервсный аккаунт в консоли YC и сохраняем ключ на директорию выше проекта:
+```
+yc iam key create --service-account-name admin --output ../key.json
+```
+3) Переходим в каталог terrafrom и запускаем его:
+```
+terrafrom apply
+```
+4) После того, как terraform отработает в выходной информации будут следующие адреса:
+```
+ external_ip_address_gitlab = "51.250.64.177"
+ external_ip_address_runner = "51.250.67.137"
+```
+
+3) Переходим по адресу gitlab (login/pass:root/roottoor123), отключаем регистрацию, меняем пароль на какой захотим и импортируем проект с гитхаба:
+
+4) Берм ключ из проекта и регистрируем раннер:
+```
+ssh login@external_ip_address_runner
+cd /srv/runner/
+vi .env
+docker-compose up -d
+```
+В папке раннеа /srv/runner прописываем в env данные поднятого gitlab и поднимаем раннер через docker-compose
+
+5) Добавляем вариейбелсы в проект:
+```
+    CI_REGISTRY docker.io
+    CI_REGISTRY_PASSWORD docker_hub_passwod
+    CI_REGISTRY_USER docker_hub_login
+    CI_TOKEN - токен для root
+    CI_USERNAME root
+```
+5) Подключаем конекст нашего кубер кластера:
+```
+yc managed-kubernetes cluster get-credentials ID_k8s_cluster  --external
+```
+6) Создаем ns для ArgoCD: 
+```
+kubectl create namespace argocd
+```
+7) Добавляем репозиторий ArgoCD и установим его: 
+```
+helm repo add argo https://argoproj.github.io/argo-helm
+
+helm install argocd \
+	-n argocd \
+	--set global.image.repository="argoproj/argocd" \
+	--set global.image.tag="v2.4.8" \
+	--set server.service.type="LoadBalancer" \
+	argo/argo-cd
+```
+
+проверяем и узнаем IP(можно посмотреть в консоли YC):
+
+```
+kubectl get pods -n argocd
+kubbectl get svc -n argocd
+```
+
+Забираем пароль для админа ArgoCD:
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+9) Добавляем репозитарий Nginx и устанавливаем Ingress-контроллер:
+```
+helm repo add nginx-stable https://helm.nginx.com/stable
+
+helm install nginx  ingress-nginx/ingress-nginx
+```
+
+10) Меняем в .gitlab-ci.yml ip-адреса на новый гитлаб.
+
+11) Переходим в ArgoCD и подключаем репозитарий:
+<картинка.жыпег>
+
+12) Создаем приложение и синхронизируем: \
+<картинка.жыпег>
+
+13) Переходим по внешним адресам:
+* UI  http://ingress-ip/grafana
+* Prometheus http://ingress-ip/prometheus/graph
+* Grafana  http://ingress-ip/grafana
+
+|:warning: Grafana нуждается в доп настройке, в части подключения source prometheus|
 | --- |
 
 ## Внесеные изменения по проекту:
