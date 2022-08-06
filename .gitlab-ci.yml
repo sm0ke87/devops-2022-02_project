@@ -56,7 +56,7 @@ deploy-prod:
     - git config --get user.email
     - git config --get user.name
   script:
-    - git checkout -B master1
+    - git checkout -B master
     - cd kubernetes
     - kustomize edit set image sm0ke87/rabbitmq:main=sm0ke87/rabbitmq:${CI_COMMIT_SHORT_SHA}
     - kustomize edit set image sm0ke87/search_engine_crawler:main=sm0ke87/search_engine_crawler:${CI_COMMIT_SHORT_SHA}
@@ -65,4 +65,4 @@ deploy-prod:
     - kustomize edit set image sm0ke87/grafana:main=sm0ke87/grafana:${CI_COMMIT_SHORT_SHA}
     - cat kustomization.yaml
     - git commit -am '[skip ci] PROD image update'
-    - git push origin master1
+    - git push origin master
