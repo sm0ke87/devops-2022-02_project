@@ -6,3 +6,4 @@ terraform/metadata
 terraform/.terraform
 terraform/terraform.tfvars
 inst.list
+tls.key

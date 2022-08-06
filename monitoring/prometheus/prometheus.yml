@@ -23,11 +23,11 @@ scrape_configs:
          # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ['%{crawler}:8000']
+      - targets: ['crawler:8000']
 
   - job_name: 'ui'
          # metrics_path defaults to '/metrics'
          # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ['%{ui}:8000']
+      - targets: ['ui:8000']
