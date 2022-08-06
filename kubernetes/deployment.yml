@@ -207,6 +207,8 @@ kind: Ingress
 metadata:
   name: ingress
   namespace: app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
