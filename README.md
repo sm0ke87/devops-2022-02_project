@@ -160,7 +160,7 @@ helm install nginx  ingress-nginx/ingress-nginx
 > channel.queue_declare(queue=mqqueue, **durable=True**) \
 Для того, что бы очередь была согласована со стороны Crawler
 
-|:bangbang: Иначе:|
+|:bangbang: Иначе:
  Login failed|
 | --- | 
 ```service-acc
@@ -172,13 +172,13 @@ rabbitmq    | 2022-07-22 09:42:14.404201+00:00 [warning] <0.589.0> client unexpe
 2. Создание **password_gen_rabbit.sh**
 > Скрипт для генерации пароля для пользователя RabbitMQ согласно документации
 
-|:bangbang: Иначе:|
+|:bangbang: Иначе:
  Login failed|
 | --- | 
 3. **search_engine_ui/requirements.txt**
 > Добавлен MarkupSafe>=2.0
 
-|:bangbang: Иначе:|
+|:bangbang: Иначе:
  Иначе приложение либо не запускается с 0.23 версией, или Jinja2 не может вернуть index.html|
 | --- | 
 
