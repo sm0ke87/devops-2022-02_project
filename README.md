@@ -19,6 +19,7 @@
 ![YandexCloud](./icon_white_circ.svg)
 
 </div>
+
 ## Проект от курса OTUS devops-2022-02
 Основа проекта:
 * [Crawler](https://github.com/express42/search_engine_crawler "Crawler")
