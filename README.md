@@ -40,8 +40,8 @@
 - [ ] Мониторинг по желанию
 
 ### Terrafrom + Ansible
-Terrafrom разворачивает 2 инстанса: \
-  * Giltab и средствами Ansible через роль giltab-ansible и производит установку и запуск Docker-compose c Gitlab. \
+Terrafrom разворачивает 2 инстанса: 
+  * Giltab и средствами Ansible через роль giltab-ansible и производит установку и запуск Docker-compose c Gitlab. 
   * Gitlab-runner и средствами Ansible через роль 
     gitlab-ansible-runner проивзодит установку Docker-compose с необходимыми в будущем yml и env файлами.
 
@@ -70,6 +70,9 @@ ArgoCD остлеживает основную ветку main, последни
 |:warning: Политики безопасности для YC кластера я не победил, хотя в terraform они прописаны, в части подключение по SSH, поэтому автоматизацию через Ansible не смог произвести, следовательно решение следующее: prometheus и grafana собираются из docker образов и деплоятся в проект, считаю меру более чем применимой|
 | :--- |
 
+### Безопасность
+Деплойментом прописано использование SSL Let's Encypt для личного домена https://informationsecurity.space
+
 
 ## Как запустить проект
 1) Клонируем проект:
@@ -90,7 +93,7 @@ terrafrom apply
  external_ip_address_runner = "51.250.67.137"
 ```
 
-3) Переходим по адресу gitlab (login/pass:root/roottoor123), отключаем регистрацию, меняем пароль на какой захотим и импортируем проект с гитхаба:
+3) Переходим по адресу gitlab (default login/pass:root/roottoor123), отключаем регистрацию, меняем пароль на какой захотим и импортируем проект с гитхаба:
 
 4) Берем ключ из проекта и регистрируем раннер. В папке раннеа /srv/runner прописываем в env данные поднятого gitlab и поднимаем раннер через docker-compose:
 ```
@@ -157,9 +160,9 @@ helm install nginx  ingress-nginx/ingress-nginx
 <картинка.жыпег>
 
 13) Переходим по внешним адресам:
-* UI  http://ingress-ip/grafana
-* Prometheus http://ingress-ip/prometheus/graph
-* Grafana  http://ingress-ip/grafana
+* [UI](https://informationsecurity.space/grafana)
+* [Prometheus](https://informationsecurity.space/prometheus/graph)
+* [Grafana](https://informationsecurity.space/grafana)
 
 |:warning: Grafana нуждается в доп настройке, в части подключения source prometheus|
 | :--- |

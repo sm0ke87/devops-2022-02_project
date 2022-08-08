@@ -29,16 +29,18 @@ docker-build:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build --pull -t sm0ke87/search_engine_crawler:$CI_COMMIT_SHORT_SHA ./search_engine_crawler
-    - docker push sm0ke87/search_engine_crawler:$CI_COMMIT_SHORT_SHA
-    - docker build --pull -t sm0ke87/search_engine_ui:$CI_COMMIT_SHORT_SHA ./search_engine_ui
-    - docker push sm0ke87/search_engine_ui:$CI_COMMIT_SHORT_SHA
-    - docker build --pull -t sm0ke87/rabbitmq:$CI_COMMIT_SHORT_SHA ./rabbitMQ
-    - docker push sm0ke87/rabbitmq:$CI_COMMIT_SHORT_SHA
-    - docker build --pull -t sm0ke87/prometheus:$CI_COMMIT_SHORT_SHA ./monitoring/prometheus
-    - docker push sm0ke87/prometheus:$CI_COMMIT_SHORT_SHA
-    - docker build --pull -t sm0ke87/grafana:$CI_COMMIT_SHORT_SHA ./monitoring/grafana
-    - docker push sm0ke87/grafana:$CI_COMMIT_SHORT_SHA
+    - docker build --pull -t $CI_REGISTRY_USER/search_engine_crawler:$CI_COMMIT_SHORT_SHA ./search_engine_crawler
+    - docker push $CI_REGISTRY_USER/search_engine_crawler:$CI_COMMIT_SHORT_SHA
+    - docker build --pull -t $CI_REGISTRY_USER/search_engine_ui:$CI_COMMIT_SHORT_SHA ./search_engine_ui
+    - docker push $CI_REGISTRY_USER/search_engine_ui:$CI_COMMIT_SHORT_SHA
+    - docker build --pull -t $CI_REGISTRY_USER/rabbitmq:$CI_COMMIT_SHORT_SHA ./rabbitMQ
+    - docker push $CI_REGISTRY_USER/rabbitmq:$CI_COMMIT_SHORT_SHA
+    - docker build --pull -t $CI_REGISTRY_USER/prometheus:$CI_COMMIT_SHORT_SHA ./monitoring/prometheus
+    - docker push $CI_REGISTRY_USER/prometheus:$CI_COMMIT_SHORT_SHA
+    - docker build --pull -t $CI_REGISTRY_USER/grafana:$CI_COMMIT_SHORT_SHA ./monitoring/grafana
+    - docker push $CI_REGISTRY_USER/grafana:$CI_COMMIT_SHORT_SHA
+  only:
+    - main
 
 
 deploy-prod:
@@ -47,10 +49,10 @@ deploy-prod:
   before_script:
     - apk add --no-cache git curl bash
     - git config --global http.sslVerify false
-    - git clone http://${CI_USERNAME}:${CI_TOKEN}@51.250.64.177/root/devops-2022-02_project.git
+    - git clone http://${CI_USERNAME}:${CI_TOKEN}@${CI_GITLAB_IP}/root/devops-2022-02_project.git
     - cd devops-2022-02_project
     - git init
-    - git remote set-url origin http://${CI_USERNAME}:${CI_TOKEN}@51.250.64.177/root/devops-2022-02_project.git
+    - git remote set-url origin http://${CI_USERNAME}:${CI_TOKEN}@${CI_GITLAB_IP}/root/devops-2022-02_project.git
     - git config --global user.email "gitlab@gitlab.com"
     - git config --global user.name "${CI_USERNAME}"
     - git config --get user.email
@@ -58,11 +60,13 @@ deploy-prod:
   script:
     - git checkout -B master
     - cd kubernetes
-    - kustomize edit set image sm0ke87/rabbitmq:main=sm0ke87/rabbitmq:${CI_COMMIT_SHORT_SHA}
-    - kustomize edit set image sm0ke87/search_engine_crawler:main=sm0ke87/search_engine_crawler:${CI_COMMIT_SHORT_SHA}
-    - kustomize edit set image sm0ke87/search_engine_ui:main=sm0ke87/search_engine_ui:${CI_COMMIT_SHORT_SHA}
-    - kustomize edit set image sm0ke87/prometheus:main=sm0ke87/prometheus:${CI_COMMIT_SHORT_SHA}
-    - kustomize edit set image sm0ke87/grafana:main=sm0ke87/grafana:${CI_COMMIT_SHORT_SHA}
+    - kustomize edit set image ${CI_REGISTRY_USER}/rabbitmq:main=${CI_REGISTRY_USER}/rabbitmq:${CI_COMMIT_SHORT_SHA}
+    - kustomize edit set image ${CI_REGISTRY_USER}/search_engine_crawler:main=${CI_REGISTRY_USER}/search_engine_crawler:${CI_COMMIT_SHORT_SHA}
+    - kustomize edit set image ${CI_REGISTRY_USER}/search_engine_ui:main=${CI_REGISTRY_USER}/search_engine_ui:${CI_COMMIT_SHORT_SHA}
+    - kustomize edit set image ${CI_REGISTRY_USER}/prometheus:main=${CI_REGISTRY_USER}/prometheus:${CI_COMMIT_SHORT_SHA}
+    - kustomize edit set image ${CI_REGISTRY_USER}/grafana:main=${CI_REGISTRY_USER}/grafana:${CI_COMMIT_SHORT_SHA}
     - cat kustomization.yaml
     - git commit -am '[skip ci] PROD image update'
     - git push origin master
+  only:
+    - main
