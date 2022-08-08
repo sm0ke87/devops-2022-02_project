@@ -63,9 +63,10 @@ ArgoCD остлеживает основную ветку main, последни
 ### Сбор метрик
 Для сбора метрик, которые отдает приложение и crawler, в Kubernetes разворачивается два сервиса:
 
-* Prometheus c адресом http://ingress-ip/prometheus/graph
-* Grafana с адресом http://ingress-ip/grafana
+* [Prometheus](https://informationsecurity.space/prometheus/graph)
+* [Grafana](https://informationsecurity.space/grafana)
 * Ноды контролируются ArgoCD
+
 
 |:warning: Политики безопасности для YC кластера я не победил, хотя в terraform они прописаны, в части подключение по SSH, поэтому автоматизацию через Ansible не смог произвести, следовательно решение следующее: prometheus и grafana собираются из docker образов и деплоятся в проект, считаю меру более чем применимой|
 | :--- |
@@ -154,10 +155,14 @@ helm install nginx  ingress-nginx/ingress-nginx
 10) Меняем в .gitlab-ci.yml ip-адреса на новый гитлаб.
 
 11) Переходим в ArgoCD и подключаем репозитарий:
-<картинка.жыпег>
+<div id="argoCD">
+ <img src="argocd_app.png" alt="ArgoCD repo" width="900" height="100">
+<div>
 
-12) Создаем приложение и синхронизируем: \
-<картинка.жыпег>
+12) Создаем приложение и синхронизируем: 
+<div id="argoCD_dep">
+ <img src="argocd_app_dep.png" alt="ArgoCD deploy" width="900" height="400">
+<div>
 
 13) Переходим по внешним адресам:
 * [UI](https://informationsecurity.space/grafana)
