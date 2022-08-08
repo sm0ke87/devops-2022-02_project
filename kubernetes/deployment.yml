@@ -168,7 +168,7 @@ metadata:
     app: mongo
     project: gitlab-project
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mongo
@@ -185,6 +185,13 @@ spec:
       - name: mongo
         # так мы назвали наш docker image
         image: mongo:3.2
+        volumeMounts:
+          - name: mongo-pv-storage
+            mountPath: /data/db
+      volumes:
+      - name: mongo-pv-storage
+        persistentVolumeClaim:
+          claimName: pvc-dynamic
 ---
 kind: Service
 apiVersion: v1
@@ -229,7 +236,6 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
-  ingressClassName: nginx
   tls:
     - hosts:
       - informationsecurity.space
@@ -361,3 +367,15 @@ spec:
     targetPort: 3000
   selector:
     app: grafana
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-dynamic
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: yc-network-hdd
+  resources:
+    requests:
+      storage: 4Gi

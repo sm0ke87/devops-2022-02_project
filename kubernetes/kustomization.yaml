@@ -5,17 +5,17 @@ resources:
 images:
 - name: sm0ke87/grafana:main
   newName: sm0ke87/grafana
-  newTag: 83a5e1a4
+  newTag: "25024870"
 - name: sm0ke87/prometheus:main
   newName: sm0ke87/prometheus
-  newTag: 83a5e1a4
+  newTag: "25024870"
 - name: sm0ke87/rabbitmq:main
   newName: sm0ke87/rabbitmq
-  newTag: 83a5e1a4
+  newTag: "25024870"
 - name: sm0ke87/search_engine_crawler:main
   newName: sm0ke87/search_engine_crawler
-  newTag: 83a5e1a4
+  newTag: "25024870"
 - name: sm0ke87/search_engine_ui:main
   newName: sm0ke87/search_engine_ui
-  newTag: 83a5e1a4
+  newTag: "25024870"
 
