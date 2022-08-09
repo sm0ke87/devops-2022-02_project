@@ -168,7 +168,7 @@ metadata:
     app: mongo
     project: gitlab-project
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: mongo
@@ -375,7 +375,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: yc-network-hdd
+  storageClassName: yc-network-ssd
   resources:
     requests:
       storage: 4Gi

@@ -151,9 +151,13 @@ helm repo add nginx-stable https://helm.nginx.com/stable
 
 helm install nginx  ingress-nginx/ingress-nginx
 ```
+10) Доавляем cert-meneger
+```
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
 
-10) Меняем в .gitlab-ci.yml ip-адреса на новый гитлаб.
-
+Смотрим:
+kubectl get pods -n cert-manager
+```
 11) Переходим в ArgoCD и подключаем репозитарий:
 <div id="argoCD">
  <img src="argocd_app.png" alt="ArgoCD repo" width="900" height="100">
@@ -198,3 +202,5 @@ rabbitmq    | 2022-07-22 09:42:14.404201+00:00 [warning] <0.589.0> client unexpe
 |:bangbang: Или приложение не запускается с 0.23 версией, или Jinja2 не может вернуть index.html |
 | :--- |
 
+4. **StatefulSet**
+Была идея сделать реплики монго, применен StatefulSet. Но весь деплоймент собирался крайне тяжело, постоянно отлетал crawler, так как монго запрашивала диски и проч. а crawler не умеет ждать=). ReadWriteMany как я понял YC не поддерживает для одного диска, поэтому через volumeClaimTemplates заработало. Идея опробована, но тяжела для данного проекта.
